@@ -1,0 +1,371 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	E:\IUT Books\6th Semester EEE\LAB\EEE 4606_Microcontroller Based System Design\Lab 7_Bluetooth Interfacing\LED_Glow_Proteus.ASM
+	Object File:	E:\IUT Books\6th Semester EEE\LAB\EEE 4606_Microcontroller Based System Design\Lab 7_Bluetooth Interfacing\LED_Glow_Proteus.hex
+	List File:	E:\IUT Books\6th Semester EEE\LAB\EEE 4606_Microcontroller Based System Design\Lab 7_Bluetooth Interfacing\LED_Glow_Proteus.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:		N      0000	ORG 00H
+    2:
+    3:
+    4:	  0000			bluetooth:
+    5:	  0000	75 89 20	MOV TMOD,#20H 	;TIMER 1 MODE 2   8 BIT MODE
+    6:	  0003	75 8D FD	MOV TH1,#-3 	;9600 BAUD RATE
+    7:	  0006	75 98 50	MOV SCON,#50H	;SERIAL MODE 1; 10 BIT TOTAL [1 START BIT + 8 DATA BIT + 1 STOP BIT]]
+    8:	  0009	C2 99		CLR TI		; MAKE TI REGISTER ZERO
+    9:	  000B	C2 98		CLR RI		; MAKE RI REGISTER ZERO
+   10:	  000D	D2 8E		SETB TR1	; START TIMER-1
+   11:
+   12:	  000F	75 90 00	MOV P1,#000H
+   13:
+   14:	  0012			AGAIN:
+   15:	  0012	30 98 FD	REPEAT: JNB RI,REPEAT
+   16:	  0015	E5 99			MOV A,SBUF	; MOVE CONTENT OF SBUF TO ACCUMULATOR
+   17:	  0017	B4 61 09		CJNE A,#'a',CHECKNEXT1
+   18:	  001A	B2 90			CPL P1.0
+   19:	  001C	C2 98			CLR RI
+   20:	  001E	C2 99			CLR TI
+   21:	  0020	02 00 12		LJMP AGAIN
+   22:
+   23:	  0023			CHECKNEXT1:
+   24:	  0023	B4 62 09		CJNE A,#'b',CHECKNEXT2
+   25:	  0026	B2 91			CPL P1.1
+   26:	  0028	C2 98			CLR RI
+   27:	  002A	C2 99			CLR TI
+   28:	  002C	02 00 12		LJMP AGAIN
+   29:
+   30:	  002F			CHECKNEXT2:
+   31:	  002F	B4 63 09		CJNE A,#'c',CHECKNEXT3
+   32:	  0032	B2 92			CPL P1.2
+   33:	  0034	C2 98			CLR RI
+   34:	  0036	C2 99			CLR TI
+   35:	  0038	02 00 12		LJMP AGAIN
+   36:
+   37:	  003B			CHECKNEXT3:
+   38:	  003B	B4 64 09		CJNE A,#'d',CHECKNEXT4
+   39:	  003E	B2 93			CPL P1.3
+   40:	  0040	C2 98			CLR RI
+   41:	  0042	C2 99			CLR TI
+   42:	  0044	02 00 12		LJMP AGAIN
+   43:
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   44:	  0047			CHECKNEXT4:
+   45:	  0047	B4 65 09		CJNE A,#'e',CHECKNEXT5
+   46:	  004A	B2 94			CPL P1.4
+   47:	  004C	C2 98			CLR RI
+   48:	  004E	C2 99			CLR TI
+   49:	  0050	02 00 12		LJMP AGAIN
+   50:
+   51:	  0053			CHECKNEXT5:
+   52:	  0053	B4 66 09		CJNE A,#'f',CHECKNEXT6
+   53:	  0056	B2 95			CPL P1.5
+   54:	  0058	C2 98			CLR RI
+   55:	  005A	C2 99			CLR TI
+   56:	  005C	02 00 12		LJMP AGAIN
+   57:
+   58:	  005F			CHECKNEXT6:
+   59:	  005F	B4 67 09		CJNE A,#'g',CHECKNEXT7
+   60:	  0062	B2 96			CPL P1.6
+   61:	  0064	C2 98			CLR RI
+   62:	  0066	C2 99			CLR TI
+   63:	  0068	02 00 12		LJMP AGAIN
+   64:
+   65:	  006B			CHECKNEXT7:
+   66:	  006B	B4 68 09		CJNE A,#'h',CHECKNEXT8
+   67:	  006E	B2 97			CPL P1.7
+   68:	  0070	C2 98			CLR RI
+   69:	  0072	C2 99			CLR TI
+   70:	  0074	02 00 12		LJMP AGAIN
+   71:
+   72:	  0077			CHECKNEXT8:
+   73:	  0077	B4 69 1A		CJNE A,#'i',CHECKNEXT9
+   74:
+   75:	  007A	75 80 FF		MOV P0,#0FFFFH	;connected to DOT_MATRIX DISPLAY
+   76:	  007D	75 A0 FF		MOV P2,#0FFFFH	;connected to DOT_MATRIX DISPLAY
+   77:
+   78:	  0080	7D 00			MOV R5,#00000000B
+   79:	  0082	7E FF			MOV R6,#11111111B
+   80:	  0084	75 50 14		MOV 50H,#20D		;COUNTER FOR BLINKING 20 TIMES
+   81:	  0087	12 00 A4		DOT_MATRIX:  LCALL DOT_MATRIX_BLINK
+   82:	  008A	D5 50 FA		DJNZ 50H,DOT_MATRIX
+   83:	  008D	C2 98			CLR RI
+   84:	  008F	C2 99			CLR TI
+   85:	  0091	02 00 12		LJMP AGAIN
+   86:
+   87:	  0094			CHECKNEXT9:
+   88:	  0094	B4 6A 0A		CJNE A,#'j',GO_BACK
+   89:					;RESET ALL
+   90:	  0097	75 90 00		MOV P1,#00H
+   91:	  009A	C2 98			CLR RI
+   92:	  009C	C2 99			CLR TI
+   93:	  009E	02 00 00		LJMP bluetooth
+   94:
+   95:	  00A1	02 00 12	GO_BACK: LJMP AGAIN
+   96:
+   97:	  00A4			DOT_MATRIX_BLINK:
+   98:				;GLOW
+   99:	  00A4	C2 80		CLR P0.0
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+  100:	  00A6	8E A0		MOV P2,R6
+  101:	  00A8	31 0E		ACALL DELAY1
+  102:
+  103:				;DIM
+  104:	  00AA	D2 80		SETB P0.0
+  105:	  00AC	8D A0		MOV P2,R5
+  106:	  00AE	31 0E		ACALL DELAY1
+  107:
+  108:				;GLOW
+  109:	  00B0	C2 81		CLR P0.1
+  110:	  00B2	8E A0		MOV P2,R6
+  111:	  00B4	31 0E		ACALL DELAY1
+  112:
+  113:				;DIM
+  114:	  00B6	D2 81		SETB P0.1
+  115:	  00B8	8D A0		MOV P2,R5
+  116:	  00BA	31 0E		ACALL DELAY1
+  117:
+  118:				;GLOW
+  119:	  00BC	C2 82		CLR P0.2
+  120:	  00BE	8E A0		MOV P2,R6
+  121:	  00C0	31 0E		ACALL DELAY1
+  122:
+  123:				;DIM
+  124:	  00C2	D2 82		SETB P0.2
+  125:	  00C4	8D A0		MOV P2,R5
+  126:	  00C6	31 0E		ACALL DELAY1
+  127:
+  128:
+  129:				;GLOW
+  130:	  00C8	C2 83		CLR P0.3
+  131:	  00CA	8E A0		MOV P2,R6
+  132:	  00CC	31 0E		ACALL DELAY1
+  133:
+  134:				;DIM
+  135:	  00CE	D2 83		SETB P0.3
+  136:	  00D0	8D A0		MOV P2,R5
+  137:	  00D2	31 0E		ACALL DELAY1
+  138:
+  139:
+  140:				;GLOW
+  141:	  00D4	C2 84		CLR P0.4
+  142:	  00D6	8E A0		MOV P2,R6
+  143:	  00D8	31 0E		ACALL DELAY1
+  144:
+  145:				;DIM
+  146:	  00DA	D2 84		SETB P0.4
+  147:	  00DC	8D A0		MOV P2,R5
+  148:	  00DE	31 0E		ACALL DELAY1
+  149:
+  150:
+  151:				;GLOW
+  152:	  00E0	C2 85		CLR P0.5
+  153:	  00E2	8E A0		MOV P2,R6
+  154:	  00E4	31 0E		ACALL DELAY1
+  155:
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+ Line  I  Addr  Code            Source
+
+  156:				;DIM
+  157:	  00E6	D2 85		SETB P0.5
+  158:	  00E8	8D A0		MOV P2,R5
+  159:	  00EA	31 0E		ACALL DELAY1
+  160:
+  161:				;GLOW
+  162:	  00EC	C2 86		CLR P0.6
+  163:	  00EE	8E A0		MOV P2,R6
+  164:	  00F0	31 0E		ACALL DELAY1
+  165:
+  166:				;DIM
+  167:	  00F2	D2 86		SETB P0.6
+  168:	  00F4	8D A0		MOV P2,R5
+  169:	  00F6	31 0E		ACALL DELAY1
+  170:
+  171:
+  172:				;GLOW
+  173:	  00F8	C2 87		CLR P0.7
+  174:	  00FA	8E A0		MOV P2,R6
+  175:	  00FC	31 0E		ACALL DELAY1
+  176:
+  177:				;DIM
+  178:	  00FE	D2 87		SETB P0.7
+  179:	  0100	8D A0		MOV P2,R5
+  180:	  0102	31 0E		ACALL DELAY1
+  181:
+  182:	  0104	22		RET
+  183:
+  184:
+  185:
+  186:	  0105	7B 32		DELAY:   MOV  R3,#50
+  187:	  0107	7C FF		AGAIN_2: MOV  R4,#255
+  188:	  0109	DC FE		AGAIN_3:   DJNZ R4,AGAIN_3
+  189:	  010B	DB FA		         DJNZ R3,AGAIN_2
+  190:	  010D	22		         RET
+  191:
+  192:	  010E			DELAY1:
+  193:	  010E	78 03				MOV R0,#3
+  194:	  0110	79 64			L1:	MOV R1,#100
+  195:	  0112	7A 64			L2:	MOV R2,#100
+  196:	  0114	DA FE			L3:	DJNZ R2,L3
+  197:	  0116	D9 FA				DJNZ R1,L2
+  198:	  0118	D8 F6				DJNZ R0,L1
+  199:	  011A	22				RET
+  200:
+  201:					END
+
+
+
+
+
+                     register banks used:  ---
+
+                     no errors
+
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6
+ACC				  DATA	      E0
+AGAIN				  CODE	    0012	  14
+AGAIN_2				  CODE	    0107	 187
+AGAIN_3				  CODE	    0109	 188
+B				  DATA	      F0
+BLUETOOTH			  CODE	    0000	   4
+CHECKNEXT1			  CODE	    0023	  23
+CHECKNEXT2			  CODE	    002F	  30
+CHECKNEXT3			  CODE	    003B	  37
+CHECKNEXT4			  CODE	    0047	  44
+CHECKNEXT5			  CODE	    0053	  51
+CHECKNEXT6			  CODE	    005F	  58
+CHECKNEXT7			  CODE	    006B	  65
+CHECKNEXT8			  CODE	    0077	  72
+CHECKNEXT9			  CODE	    0094	  87
+CY				  BIT	      D7
+DELAY				  CODE	    0105	 186
+DELAY1				  CODE	    010E	 192
+DOT_MATRIX			  CODE	    0087	  81
+DOT_MATRIX_BLINK		  CODE	    00A4	  97
+DPH				  DATA	      83
+DPL				  DATA	      82
+EA				  BIT	      AF
+ES				  BIT	      AC
+ET0				  BIT	      A9
+ET1				  BIT	      AB
+EX0				  BIT	      A8
+EX1				  BIT	      AA
+EXTI0				  CODE	    0003
+EXTI1				  CODE	    0013
+F0				  BIT	      D5
+GO_BACK				  CODE	    00A1	  95
+IE				  DATA	      A8
+IE0				  BIT	      89
+IE1				  BIT	      8B
+INT0				  BIT	      B2
+INT1				  BIT	      B3
+IP				  DATA	      B8
+IT0				  BIT	      88
+IT1				  BIT	      8A
+L1				  CODE	    0110	 194
+L2				  CODE	    0112	 195
+L3				  CODE	    0114	 196
+OV				  BIT	      D2
+P				  BIT	      D0
+P0				  DATA	      80
+P1				  DATA	      90
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 7
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+P2				  DATA	      A0
+P3				  DATA	      B0
+PCON				  DATA	      87
+PS				  BIT	      BC
+PSW				  DATA	      D0
+PT0				  BIT	      B9
+PT1				  BIT	      BB
+PX0				  BIT	      B8
+PX1				  BIT	      BA
+RB8				  BIT	      9A
+RD				  BIT	      B7
+REN				  BIT	      9C
+REPEAT				  CODE	    0012	  15
+RESET				  CODE	    0000
+RI				  BIT	      98
+RS0				  BIT	      D3
+RS1				  BIT	      D4
+RXD				  BIT	      B0
+SBUF				  DATA	      99
+SCON				  DATA	      98
+SINT				  CODE	    0023
+SM0				  BIT	      9F
+SM1				  BIT	      9E
+SM2				  BIT	      9D
+SP				  DATA	      81
+T0				  BIT	      B4
+T1				  BIT	      B5
+TB8				  BIT	      9B
+TCON				  DATA	      88
+TF0				  BIT	      8D
+TF1				  BIT	      8F
+TH0				  DATA	      8C
+TH1				  DATA	      8D
+TI				  BIT	      99
+TIMER0				  CODE	    000B
+TIMER1				  CODE	    001B
+TL0				  DATA	      8A
+TL1				  DATA	      8B
+TMOD				  DATA	      89
+TR0				  BIT	      8C
+TR1				  BIT	      8E
+TXD				  BIT	      B1
+WR				  BIT	      B6
