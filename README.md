@@ -7,7 +7,7 @@ I've designed this to control 8 LEDs & 1 DOT-MATRIX LED display on the project b
 Assembly Language Code is written such that Dot-Matrix LEDs are grown like: 1st row on > 1st row off > 2nd row on > 2nd row off > 3rd....... >last row off > repeat
 
 # Simulation video Link
-[https://drive.google.com/file/d/1RLV61o2SbIT2E4i-RSHK2rIM4XwbKvi8/view?usp=sharing](https://drive.google.com/file/d/1FvP4Djm1AuD_oYNOZMEJQ8-Vuim8CwL6/view?usp=sharing)
+(https://drive.google.com/file/d/1FvP4Djm1AuD_oYNOZMEJQ8-Vuim8CwL6/view?usp=sharing)
 
 # Images
 ![image](https://user-images.githubusercontent.com/69683125/100485848-db727c00-312b-11eb-9b05-8c00b5ca3c3f.png)
